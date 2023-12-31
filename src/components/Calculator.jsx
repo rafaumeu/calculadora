@@ -11,7 +11,9 @@ const Calculator = () => {
       <div className='buttons'>
         <button>AC</button>
         {keypadNumbers.map((num) => (
-          <button key={num}>{num}</button>
+          <button key={num} data-testid={`button-${num}`}>
+            {num}
+          </button>
         ))}
         {operations.map((operation) => (
           <button key={operation}>{operation}</button>
