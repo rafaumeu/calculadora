@@ -12,10 +12,10 @@ const config = {
   //   '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   // },
 
-  // testMatch: [
-  //   '**/__tests__/**/*.js',
-  //   '**/?(*.)+(spec|test).[jt]s?(x)',
-  // ],
+  testMatch: ['**/__tests__/**/*.js(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+  },
 }
 
 export default config
