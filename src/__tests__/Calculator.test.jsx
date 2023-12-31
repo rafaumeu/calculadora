@@ -1,5 +1,5 @@
 import React from 'react'
-import { screen, render, waitFor } from '@testing-library/react'
+import { screen, render, waitFor, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 import '../components/Calculator.css'
@@ -47,5 +47,26 @@ describe('Calculator component', () => {
         expect(operationButton).toBeInTheDocument()
       })
     })
+  })
+  test('In click button set numbers on displays', async () => {
+    render(<Calculator />)
+    const keypadNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    await waitFor(() => {
+      keypadNumbers.forEach((num) => {
+        const numButton = screen.getByTestId(`button-${num}`) // Encontra o botão pelo texto numérico
+        fireEvent.click(numButton) // Simula o clique no botão
+
+        const displayCurrentValue = screen.getByText(num) // Procura o número atual no display
+        expect(displayCurrentValue).toBeInTheDocument() // Verifica se o número está presente no display após o clique
+      })
+    })
+  })
+  test('is ac button clear the displays', () => {
+    render(<Calculator />)
+    fireEvent.click(screen.getByTestId('button-5'))
+    fireEvent.click(screen.getByTestId('button-6'))
+    fireEvent.click(screen.getByText('AC')) //
+    const displayCurrentValue = screen.getByTestId('display')
+    expect(displayCurrentValue).toHaveTextContent('0')
   })
 })
