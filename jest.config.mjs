@@ -4,18 +4,14 @@ const config = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
-  // ... outras configurações
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+  },
 
-  // Adicione ou modifique outras opções conforme necessário
-  // Por exemplo:
-  // moduleNameMapper: {
-  //   '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-  // },
-
-  // testMatch: [
-  //   '**/__tests__/**/*.js',
-  //   '**/?(*.)+(spec|test).[jt]s?(x)',
-  // ],
+  testMatch: ['**/__tests__/**/*.js(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+  },
 }
 
 export default config
