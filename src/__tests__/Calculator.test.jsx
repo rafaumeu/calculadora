@@ -69,4 +69,98 @@ describe('Calculator component', () => {
     const displayCurrentValue = screen.getByTestId('display')
     expect(displayCurrentValue).toHaveTextContent('0')
   })
+  test('Operação de adição (+)', () => {
+    render(<Calculator />)
+
+    // Simula a inserção dos números 5 e 6
+    fireEvent.click(screen.getByTestId('button-5'))
+    fireEvent.click(screen.getByTestId('button-6'))
+
+    // Simula a operação de adição (+)
+    fireEvent.click(screen.getByText('+'))
+
+    // Verifica se a operação foi corretamente refletida no estado do componente
+    expect(screen.getByTestId('display')).toHaveTextContent('0') // Valor resetado após inserir o 5 e 6
+    expect(screen.getByText('56 +')).toBeInTheDocument()
+  })
+
+  // Testes para as outras operações (-, *, /) seguem a mesma lógica
+
+  test('Operação de divisão (/)', () => {
+    render(<Calculator />)
+
+    fireEvent.click(screen.getByTestId('button-1'))
+    fireEvent.click(screen.getByTestId('button-0'))
+    fireEvent.click(screen.getByText('/'))
+    fireEvent.click(screen.getByTestId('button-5'))
+
+    expect(screen.getByTestId('complete-operation')).toHaveTextContent('10 / 5')
+    fireEvent.click(screen.getByText('='))
+    expect(screen.getByTestId('display')).toHaveTextContent('2')
+  })
+
+  test('Operação de cálculo (=)', () => {
+    render(<Calculator />)
+
+    fireEvent.click(screen.getByTestId('button-9'))
+    fireEvent.click(screen.getByTestId('button-3'))
+    fireEvent.click(screen.getByText('/'))
+    fireEvent.click(screen.getByTestId('button-0'))
+
+    fireEvent.click(screen.getByText('='))
+
+    // Verifica se a operação foi corretamente calculada e refletida no estado do componente
+    expect(screen.getByTestId('complete-operation')).toHaveTextContent('Error') // Divisão por zero
+    expect(screen.getByTestId('display')).toHaveTextContent('Error')
+  })
+  test('handleCalculate for addition', () => {
+    render(<Calculator />)
+    fireEvent.click(screen.getByTestId('button-3'))
+    fireEvent.click(screen.getByText('+'))
+    fireEvent.click(screen.getByTestId('button-7'))
+    fireEvent.click(screen.getByText('='))
+    expect(screen.getByTestId('display')).toHaveTextContent('10')
+    expect(screen.getByTestId('complete-operation')).toHaveTextContent('3 + 7')
+  })
+  test('handleOperation setPendingOperation and setCurrentValue', () => {
+    render(<Calculator />)
+    fireEvent.click(screen.getByTestId('button-5'))
+    fireEvent.click(screen.getByText('+'))
+    expect(screen.getByText('5 +')).toBeInTheDocument()
+    expect(screen.getByTestId('display')).toHaveTextContent('0')
+  })
+  test('handleCalculate retorna sem executar em caso de valores nulos', () => {
+    render(<Calculator />)
+
+    // Simula a inserção de um número, seguido da operação de cálculo sem operação pendente
+    fireEvent.click(screen.getByTestId('button-1'))
+    fireEvent.click(screen.getByText('='))
+
+    // Verifica se o display continua com o mesmo valor (sem alterações)
+    expect(screen.getByTestId('display')).toHaveTextContent('1')
+  })
+  test('Operação de subtração (-)', () => {
+    render(<Calculator />)
+
+    fireEvent.click(screen.getByTestId('button-7'))
+    fireEvent.click(screen.getByText('-'))
+    fireEvent.click(screen.getByTestId('button-4'))
+    fireEvent.click(screen.getByText('='))
+
+    // Verifica se a subtração foi realizada corretamente
+    expect(screen.getByTestId('display')).toHaveTextContent('3')
+    expect(screen.getByText('7 - 4')).toBeInTheDocument()
+  })
+  test('Operação de multiplicação (*)', () => {
+    render(<Calculator />)
+
+    fireEvent.click(screen.getByTestId('button-5'))
+    fireEvent.click(screen.getByText('*'))
+    fireEvent.click(screen.getByTestId('button-6'))
+    fireEvent.click(screen.getByText('='))
+
+    // Verifica se a multiplicação foi realizada corretamente
+    expect(screen.getByTestId('display')).toHaveTextContent('30')
+    expect(screen.getByText('5 * 6')).toBeInTheDocument()
+  })
 })
